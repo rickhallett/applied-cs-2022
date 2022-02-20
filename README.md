@@ -13,6 +13,11 @@ A classically educated compSci graduate is exposed to a litany of subjects, not 
 
 It's only in the thoroughness these things are learnt to any useful depths, and drills can be useful for providing the repetition required to develop the intuitive expertise that a senior developer uses as part of their daily practice.
 
+TODO:
+
+Config driven side nav menus?
+Create component wrapper that applies the standard container/columns?
+
 ##
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
