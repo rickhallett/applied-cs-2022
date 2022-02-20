@@ -6,10 +6,10 @@ For self taught engineers, the biggest trouble is not knowing what to focus on, 
 
 A classically educated compSci graduate is exposed to a litany of subjects, not all of which are relevant to my frontend role at Brandwatch. That said, a few fundamentals stick out:
 
-1). Alorithms and Data Structures
-2). Design Patterns and SOLID principles
-3). Refactoring, especially alongside TDD methods
-4). Common patterns and component heirarchies within enterprise level React/Redux applications
+1. Alorithms and Data Structures
+2. Design Patterns and SOLID principles
+3. Refactoring, especially alongside TDD methods
+4. Common patterns and component heirarchies within enterprise level React/Redux applications
 
 It's only in the thoroughness these things are learnt to any useful depths, and drills can be useful for providing the repetition required to develop the intuitive expertise that a senior developer uses as part of their daily practice.
 
