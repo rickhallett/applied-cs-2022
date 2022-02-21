@@ -5,6 +5,11 @@ export const Layout = () => {
     return (
         <>
             <header className="navbar p-2">
+                <section className="navbar-center mr-2">
+                    <a href="/" className="text-primary">
+                        <span className="app-title">Applied CS 2022</span>
+                    </a>
+                </section>
                 <section className="navbar-section">
                     <Link to="/design-patterns" className="btn btn-link">
                         Design Patterns
@@ -21,11 +26,6 @@ export const Layout = () => {
                     <Link to="/css" className="btn btn-link">
                         CSS
                     </Link>
-                </section>
-                <section className="navbar-center">
-                    <a href="/" className="text-primary">
-                        <span className="app-title">Applied CS 2022</span>
-                    </a>
                 </section>
                 <section className="navbar-section">
                     <a
