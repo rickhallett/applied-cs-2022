@@ -13,10 +13,19 @@ A classically educated compSci graduate is exposed to a litany of subjects, not 
 
 It's only in the thoroughness these things are learnt to any useful depths, and drills can be useful for providing the repetition required to develop the intuitive expertise that a senior developer uses as part of their daily practice.
 
-TODO:
+## Potential Feature Improvements:
 
+_High priority_
+Use main content pain to practice custom CSS presentations of patterns/data-structures
+Small stand alone react/redux/RTL projects to sandbox some of the more advanced design patterns, async data handling etc
+
+_Medium Priority_
 Config driven side nav menus?
 Create component wrapper that applies the standard container/columns?
+Would be nice to make some dynamic representations of sorting algorithms in action using react/redux
+
+_Low Priority_
+App needs a favicon, manifest file
 
 ##
 

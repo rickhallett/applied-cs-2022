@@ -6,22 +6,25 @@ export const Layout = () => {
         <>
             <header className="navbar p-2">
                 <section className="navbar-section">
-                    <Link to="/algos" className="btn btn-link">
-                        Algos
+                    <Link to="/design-patterns" className="btn btn-link">
+                        Design Patterns
                     </Link>
-                    <Link to="/" className="btn btn-link">
-                        Data
-                    </Link>
-                    <Link to="/" className="btn btn-link">
-                        Design Patters
-                    </Link>
-                    <Link to="/" className="btn btn-link">
+                    <Link to="/refactoring" className="btn btn-link">
                         Refactoring
+                    </Link>
+                    <Link to="/data-structures" className="btn btn-link">
+                        Data Structures
+                    </Link>
+                    <Link to="/advanced-react-redux" className="btn btn-link">
+                        React/Redux
+                    </Link>
+                    <Link to="/css" className="btn btn-link">
+                        CSS
                     </Link>
                 </section>
                 <section className="navbar-center">
                     <a href="/" className="text-primary">
-                        Applied CS 2022
+                        <span className="app-title">Applied CS 2022</span>
                     </a>
                 </section>
                 <section className="navbar-section">
