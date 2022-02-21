@@ -10,6 +10,7 @@ import { ReactReduxNavBar } from './components/ReactRedux/ReactReduxNavBar';
 import { CSSNavBar } from './components/CSS/CSSNavBar';
 
 import { DesignPatternsMain } from './components/DesignPatterns/DesignPatternsMain';
+import { SingleResponsibilityPrincipleMain } from './components/DesignPatterns/SingleResponsibilityPrincipleMain';
 
 import 'spectre.css';
 import './App.css';
@@ -23,6 +24,10 @@ const App = () => {
                     element={<DesignPatternsNavBar />}
                 >
                     <Route path="home" element={<DesignPatternsMain />} />
+                    <Route
+                        path="srp"
+                        element={<SingleResponsibilityPrincipleMain />}
+                    />
                 </Route>
                 <Route
                     path="/refactoring"

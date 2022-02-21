@@ -9,7 +9,7 @@ export const DesignPatternsNavBar = () => {
                         SOLID Principles
                     </a>
                     <li className="nav-item">
-                        <Link to="test">Single Responsibility Principle</Link>
+                        <Link to="srp">Single Responsibility Principle</Link>
                     </li>
                     <li className="nav-item">
                         <Link to="test2">Open/Closed Principle</Link>
