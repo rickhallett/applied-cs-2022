@@ -123,31 +123,27 @@ main {
     height: 100vh;
     width: 100vw;
     background-color: gray;
-    opacity: 0.9;
+    opacity: 0.96;
     position: absolute;
     top: 0;
-    margin: 0;
+    left: 0;
     display: none;
+    margin: 0;
 }
 
 #tcs:target {
     display: block;
 }
 
-.reveal-dialog {
-    position: relative;
-    margin: 0 auto;
-    top: 25%;
-}
-
 #tcs > h4 {
-    margin-top: 50%;
+    margin-top: 40vh;
     margin-bottom: 2rem;
 }
 
 #tcs > p {
     margin: auto;
     max-width: 50%;
+    min-width: 330px;
 }
 
 #tcs > a {
