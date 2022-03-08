@@ -73,9 +73,39 @@ main {
 
 .card {
     min-width: 44vw;
+    max-width: 44vw;
     display: inline-block;
     min-height: 35vh;
+    max-height: 35vh;
     /* height: 35vh; */
+    text-align: left;
+    overflow-y: scroll;
+}
+
+.card > .title-container {
+    width: fit-content;
+    text-align: center;
+    margin: auto;
+}
+
+.card > .title-container > .card-title {
+    margin: 1rem auto;
+}
+
+.card > .card-body {
+    /* max-width: 45%; */
+    display: inline-block;
+    text-align: left;
+    padding: 1rem;
+}
+
+.card > .card-list {
+    list-style: none;
+    padding: 1rem;
+}
+
+.card > .card-list > .card-list-item {
+    margin-top: 1rem;
 }
 
 .footer {
