@@ -44,6 +44,10 @@
                 display: none;
             }
 
+            .lighten {
+                opacity: 0.5;
+            }
+
             li::after {
                 content: 'OR';
                 display: block;
@@ -106,14 +110,6 @@
             };
 
             const ListView = Backbone.View.extend({
-                constructor: function () {
-                    console.log(this);
-                },
-
-                initialize: function () {
-                    console.log('init');
-                },
-
                 render: function () {
                     this.$el = $('#list-view-template').html();
                     return this;
@@ -129,7 +125,7 @@
                     return this;
                 },
 
-                togglePanelReplaceIcons: function togglePanelReplaceIcons(e) {
+                togglePanelReplaceIcons: function (e) {
                     console.log(e);
 
                     if (
@@ -143,12 +139,16 @@
                     e.currentTarget.children[0].classList.toggle('hidden');
                     e.currentTarget.children[1].classList.toggle('hidden');
 
-                    // this.$(VIEW_SELECTORS.UPDATE_PANEL_ICON)
-                    //     .attr(
-                    //         'title',
-                    //         'Your panel is outdated. Click to refresh'
-                    //     )
-                    //     .customtip();
+                    this.$(VIEW_SELECTORS.UPDATE_PANEL_ICON)
+                        .attr(
+                            'title',
+                            'Your panel is outdated. Click to refresh'
+                        )
+                        .customtip();
+                },
+
+                toggleOpacity: function (e) {
+                    e.currentTarget.classList.toggle('lighten');
                 },
 
                 events: {
@@ -160,6 +160,12 @@
                         function onMouseLeaveOutdatedPanel(e) {
                             this.togglePanelReplaceIcons(e);
                         },
+                    'mouseenter #outdated-panel-remove-icon': function (e) {
+                        this.toggleOpacity(e);
+                    },
+                    'mouseleave #outdated-panel-remove-icon': function (e) {
+                        this.toggleOpacity(e);
+                    },
                 },
             });
 
