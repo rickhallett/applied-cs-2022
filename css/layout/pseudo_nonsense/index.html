@@ -28,7 +28,7 @@
             }
 
             li {
-                margin-bottom: 20px;
+                margin-bottom: 30px;
                 font-weight: bold;
                 color: darkblue;
                 list-style: none;
@@ -46,11 +46,17 @@
             li::after {
                 content: 'OR';
                 display: block;
+                margin-top: 5px;
                 font-weight: lighter;
                 color: lightblue;
                 /* Position: absolute is required to remove the pseudoelement from the normal document flow */
                 position: absolute;
+                left: 45px;
                 pointer-events: none;
+            }
+
+            li:last-of-type::after  {
+                content: none;;
             }
         </style>
     </head>
@@ -119,8 +125,6 @@
                 },
 
                 togglePanelReplaceIcons: function (e) {
-                    console.log(e);
-
                     if (
                         e.currentTarget.childNodes[1].classList.contains(
                             'fa-remove'
