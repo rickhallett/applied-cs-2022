@@ -32,6 +32,7 @@
                 font-weight: bold;
                 color: darkblue;
                 list-style: none;
+                position: relative;
             }
 
             .hidden {
@@ -153,15 +154,6 @@
                         function (e) {
                             this.toggleOpacity(e);
                         },
-
-                    // NOPE: jQuery doesn't recognise pseudo selector expressions (not supported)
-                    // [`mouseenter ::after`]: function (e) {
-                    //     console.log('yo');
-                    //     e.stopPropagation();
-                    // },
-                    // [`mouseleave :after`]: function (e) {
-                    //     console.log('ye');
-                    // },
                 },
             });
 
