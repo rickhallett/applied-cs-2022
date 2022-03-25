@@ -34,12 +34,6 @@
                 list-style: none;
             }
 
-            li[data-updated-panel-id] #outdated-panel-warning-icon {
-            }
-
-            li[data-updated-panel-id] #outdated-panel-warning-icon {
-            }
-
             .hidden {
                 display: none;
             }
@@ -51,12 +45,11 @@
             li::after {
                 content: 'OR';
                 display: block;
-                margin-top: 5px;
                 font-weight: lighter;
                 color: lightblue;
-            }
-
-            ::after {
+                /* Position: absolute is required to remove the pseudoelement from the normal document flow */
+                position: absolute;
+                pointer-events: none;
             }
         </style>
     </head>
@@ -64,7 +57,6 @@
     <body>
         <div id="app"></div>
         <script src="jquery.js"></script>
-        <script src="customtip.js"></script>
         <script src="underscore.js"></script>
         <script src="backbone.js"></script>
         <script type="text/template" id="list-view-template">
@@ -107,6 +99,7 @@
                     'li[data-updated-panel-id] #outdated-panel-warning-icon',
                 UPDATE_PANEL_ICON:
                     'li[data-updated-panel-id] #outdated-panel-replace-icon',
+                REMOVE_PANEL_ICON: '#outdated-panel-remove-icon',
             };
 
             const ListView = Backbone.View.extend({
@@ -121,7 +114,6 @@
 
                 render: function () {
                     this.$el.append(new ListView().render().$el);
-                    console.log(this);
                     return this;
                 },
 
@@ -138,13 +130,6 @@
 
                     e.currentTarget.children[0].classList.toggle('hidden');
                     e.currentTarget.children[1].classList.toggle('hidden');
-
-                    this.$(VIEW_SELECTORS.UPDATE_PANEL_ICON)
-                        .attr(
-                            'title',
-                            'Your panel is outdated. Click to refresh'
-                        )
-                        .customtip();
                 },
 
                 toggleOpacity: function (e) {
@@ -160,12 +145,23 @@
                         function onMouseLeaveOutdatedPanel(e) {
                             this.togglePanelReplaceIcons(e);
                         },
-                    'mouseenter #outdated-panel-remove-icon': function (e) {
-                        this.toggleOpacity(e);
-                    },
-                    'mouseleave #outdated-panel-remove-icon': function (e) {
-                        this.toggleOpacity(e);
-                    },
+                    [`mouseenter ${VIEW_SELECTORS.REMOVE_PANEL_ICON}`]:
+                        function (e) {
+                            this.toggleOpacity(e);
+                        },
+                    [`mouseleave ${VIEW_SELECTORS.REMOVE_PANEL_ICON}`]:
+                        function (e) {
+                            this.toggleOpacity(e);
+                        },
+
+                    // NOPE: jQuery doesn't recognise pseudo selector expressions (not supported)
+                    // [`mouseenter ::after`]: function (e) {
+                    //     console.log('yo');
+                    //     e.stopPropagation();
+                    // },
+                    // [`mouseleave :after`]: function (e) {
+                    //     console.log('ye');
+                    // },
                 },
             });
 
