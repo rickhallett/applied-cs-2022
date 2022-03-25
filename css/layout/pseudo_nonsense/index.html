@@ -38,7 +38,6 @@
             }
 
             li[data-updated-panel-id] #outdated-panel-warning-icon {
-                display: none;
             }
 
             .hidden {
@@ -66,43 +65,33 @@
         <script src="backbone.js"></script>
         <script type="text/template" id="list-view-template">
             <ul>
-                <li>
+                <li data-updated-panel-id="1">
                     NBA Celtics 1
                     <i
-                        id="#outdated-panel-warning-icon"
-                        data-updated-panel-id="1"
+                        id="outdated-panel-warning-icon"
                         class="fa-solid fa-triangle-exclamation"
                     ></i>
                     <i
-                        data-updated-panel-id="1"
-                        id="#outdated-panel-replace-icon"
+                        id="outdated-panel-replace-icon"
                         class="fa-solid fa-rotate hidden"
                     ></i>
                 </li>
-                <li>
+                <li data-updated-panel-id="2">
                     NBA Celtics 2
                     <i
-                        data-updated-panel-id="1"
-                        id="#outdated-panel-warning-icon"
+                        id="outdated-panel-warning-icon"
                         class="fa-solid fa-triangle-exclamation"
                     ></i>
                     <i
-                        data-updated-panel-id="1"
-                        id="#outdated-panel-replace-icon"
+                        id="outdated-panel-replace-icon"
                         class="fa-solid fa-rotate hidden"
                     ></i>
                 </li>
-                <li>
+                <li data-updated-panel-id="3">
                     NBA Celtics 3
                     <i
-                        data-updated-panel-id="1"
-                        id="#outdated-panel-warning-icon"
-                        class="fa-solid fa-triangle-exclamation hidden"
-                    ></i>
-                    <i
-                        data-updated-panel-id="1"
-                        id="#outdated-panel-replace-icon"
-                        class="fa-solid fa-rotate"
+                        id="outdated-panel-remove-icon"
+                        class="fa-solid fa-remove"
                     ></i>
                 </li>
             </ul>
@@ -117,40 +106,12 @@
             };
 
             const ListView = Backbone.View.extend({
-                constructor: function () {},
-
-                togglePanelReplaceIcons: function togglePanelReplaceIcons(e) {
-                    console.log(e);
-                    e.currentTarget.children[0].children[0].classList.toggle(
-                        'hidden'
-                    );
-                    e.currentTarget.children[0].children[1].classList.toggle(
-                        'hidden'
-                    );
-
-                    this.$(VIEW_SELECTORS.UPDATE_PANEL_ICON)
-                        .attr(
-                            'title',
-                            'Your panel is outdated. Click to refresh'
-                        )
-                        .customtip();
+                constructor: function () {
+                    console.log(this);
                 },
 
-                events: function () {
-                    return {
-                        [`click ${VIEW_SELECTORS.REFRESH_LINK}`]:
-                            function onRefresh() {
-                                this.audienceLists.fetch();
-                            },
-                        [`mouseenter ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
-                            function onMouseEnterOutdatedPanel(e) {
-                                this.togglePanelReplaceIcons(e);
-                            },
-                        [`mouseleave ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
-                            function onMouseLeaveOutdatedPanel(e) {
-                                this.togglePanelReplaceIcons(e);
-                            },
-                    };
+                initialize: function () {
+                    console.log('init');
                 },
 
                 render: function () {
@@ -164,6 +125,41 @@
 
                 render: function () {
                     this.$el.append(new ListView().render().$el);
+                    console.log(this);
+                    return this;
+                },
+
+                togglePanelReplaceIcons: function togglePanelReplaceIcons(e) {
+                    console.log(e);
+
+                    if (
+                        e.currentTarget.childNodes[1].classList.contains(
+                            'fa-remove'
+                        )
+                    ) {
+                        return;
+                    }
+
+                    e.currentTarget.children[0].classList.toggle('hidden');
+                    e.currentTarget.children[1].classList.toggle('hidden');
+
+                    // this.$(VIEW_SELECTORS.UPDATE_PANEL_ICON)
+                    //     .attr(
+                    //         'title',
+                    //         'Your panel is outdated. Click to refresh'
+                    //     )
+                    //     .customtip();
+                },
+
+                events: {
+                    [`mouseenter ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
+                        function onMouseEnterOutdatedPanel(e) {
+                            this.togglePanelReplaceIcons(e);
+                        },
+                    [`mouseleave ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
+                        function onMouseLeaveOutdatedPanel(e) {
+                            this.togglePanelReplaceIcons(e);
+                        },
                 },
             });
 
