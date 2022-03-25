@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script
+            src="https://kit.fontawesome.com/97089a475a.js"
+            crossorigin="anonymous"
+        ></script>
+        <title>Before and after nonsense</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                margin: 20px;
+            }
+
+            li {
+                margin-bottom: 20px;
+                font-weight: bold;
+                color: darkblue;
+                list-style: none;
+            }
+
+            li[data-updated-panel-id] #outdated-panel-warning-icon {
+            }
+
+            li[data-updated-panel-id] #outdated-panel-warning-icon {
+                display: none;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            li::after {
+                content: 'OR';
+                display: block;
+                margin-top: 5px;
+                font-weight: lighter;
+                color: lightblue;
+            }
+
+            ::after {
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>
+                NBA Celtics 1
+                <i
+                    id="#outdated-panel-warning-icon"
+                    data-updated-panel-id="1"
+                    class="fa-solid fa-triangle-exclamation"
+                ></i>
+                <i
+                    data-updated-panel-id="1"
+                    id="#outdated-panel-replace-icon"
+                    class="fa-solid fa-rotate hidden"
+                ></i>
+            </li>
+            <li>
+                NBA Celtics 2
+                <i
+                    data-updated-panel-id="1"
+                    id="#outdated-panel-warning-icon"
+                    class="fa-solid fa-triangle-exclamation"
+                ></i>
+                <i
+                    data-updated-panel-id="1"
+                    id="#outdated-panel-replace-icon"
+                    class="fa-solid fa-rotate hidden"
+                ></i>
+            </li>
+            <li>
+                NBA Celtics 3
+                <i
+                    data-updated-panel-id="1"
+                    id="#outdated-panel-warning-icon"
+                    class="fa-solid fa-triangle-exclamation hidden"
+                ></i>
+                <i
+                    data-updated-panel-id="1"
+                    id="#outdated-panel-replace-icon"
+                    class="fa-solid fa-rotate"
+                ></i>
+            </li>
+        </ul>
+    </body>
+</html>
