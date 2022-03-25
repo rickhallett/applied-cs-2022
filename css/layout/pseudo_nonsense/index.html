@@ -60,19 +60,19 @@
             }
         </style>
     </head>
-
     <body>
+
+        <!-- mount app -->
         <div id="app">
             <ul id="filter-panel-list"></ul>
         </div>
+
+        <!-- libraries -->
         <script src="jquery.js"></script>
         <script src="underscore.js"></script>
         <script src="backbone.js"></script>
-        <!-- <script type="text/template" id="list-view-template">
-            <ul>
 
-            </ul>
-        </script> -->
+        <!-- templates -->
         <script type="text/template" id="outdated-list-item-template">
             <li data-updated-panel-id="{{updatedPanelId}}">
                 {{name}}
@@ -86,6 +86,7 @@
                 ></i>
             </li>
         </script>
+
         <script type="text/template" id="current-list-item-template">
             <li data-updated-panel-id="{{updatedPanelId}}">
                 {{name}}
@@ -95,6 +96,8 @@
                 ></i>
             </li>
         </script>
+
+        <!-- model/collection/view logic -->
         <script>
             const FilterPanel = Backbone.Model.extend({});
 
@@ -141,20 +144,16 @@
                     filterPanels.forEach((panel) => {
                         const { name, updatedPanelId } = panel.attributes;
 
-                        let t;
-                        if (updatedPanelId) {
-                            t = _.template(
-                                $('#outdated-list-item-template')
-                                    .html()
-                                    .toString()
-                            );
-                        } else {
-                            t = _.template(
-                                $('#current-list-item-template')
-                                    .html()
-                                    .toString()
-                            );
-                        }
+                        const t = _.template(
+                            $(
+                                updatedPanelId
+                                    ? '#outdated-list-item-template'
+                                    : '#current-list-item-template'
+                            )
+                                .html()
+                                .toString()
+                        );
+
                         this.$el.append(t({ name, updatedPanelId }));
                     });
 
