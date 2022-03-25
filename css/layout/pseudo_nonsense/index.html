@@ -20,6 +20,13 @@
                 margin: 20px;
             }
 
+            ul {
+                border: solid 1px lightblue;
+                border-radius: 5px;
+                width: fit-content;
+                padding: 20px 30px 0 30px;
+            }
+
             li {
                 margin-bottom: 20px;
                 font-weight: bold;
@@ -50,47 +57,118 @@
             }
         </style>
     </head>
+
     <body>
-        <ul>
-            <li>
-                NBA Celtics 1
-                <i
-                    id="#outdated-panel-warning-icon"
-                    data-updated-panel-id="1"
-                    class="fa-solid fa-triangle-exclamation"
-                ></i>
-                <i
-                    data-updated-panel-id="1"
-                    id="#outdated-panel-replace-icon"
-                    class="fa-solid fa-rotate hidden"
-                ></i>
-            </li>
-            <li>
-                NBA Celtics 2
-                <i
-                    data-updated-panel-id="1"
-                    id="#outdated-panel-warning-icon"
-                    class="fa-solid fa-triangle-exclamation"
-                ></i>
-                <i
-                    data-updated-panel-id="1"
-                    id="#outdated-panel-replace-icon"
-                    class="fa-solid fa-rotate hidden"
-                ></i>
-            </li>
-            <li>
-                NBA Celtics 3
-                <i
-                    data-updated-panel-id="1"
-                    id="#outdated-panel-warning-icon"
-                    class="fa-solid fa-triangle-exclamation hidden"
-                ></i>
-                <i
-                    data-updated-panel-id="1"
-                    id="#outdated-panel-replace-icon"
-                    class="fa-solid fa-rotate"
-                ></i>
-            </li>
-        </ul>
+        <div id="app"></div>
+        <script src="jquery.js"></script>
+        <script src="customtip.js"></script>
+        <script src="underscore.js"></script>
+        <script src="backbone.js"></script>
+        <script type="text/template" id="list-view-template">
+            <ul>
+                <li>
+                    NBA Celtics 1
+                    <i
+                        id="#outdated-panel-warning-icon"
+                        data-updated-panel-id="1"
+                        class="fa-solid fa-triangle-exclamation"
+                    ></i>
+                    <i
+                        data-updated-panel-id="1"
+                        id="#outdated-panel-replace-icon"
+                        class="fa-solid fa-rotate hidden"
+                    ></i>
+                </li>
+                <li>
+                    NBA Celtics 2
+                    <i
+                        data-updated-panel-id="1"
+                        id="#outdated-panel-warning-icon"
+                        class="fa-solid fa-triangle-exclamation"
+                    ></i>
+                    <i
+                        data-updated-panel-id="1"
+                        id="#outdated-panel-replace-icon"
+                        class="fa-solid fa-rotate hidden"
+                    ></i>
+                </li>
+                <li>
+                    NBA Celtics 3
+                    <i
+                        data-updated-panel-id="1"
+                        id="#outdated-panel-warning-icon"
+                        class="fa-solid fa-triangle-exclamation hidden"
+                    ></i>
+                    <i
+                        data-updated-panel-id="1"
+                        id="#outdated-panel-replace-icon"
+                        class="fa-solid fa-rotate"
+                    ></i>
+                </li>
+            </ul>
+        </script>
+        <script>
+            const VIEW_SELECTORS = {
+                OUTDATED_FILTER_PANEL: 'li[data-updated-panel-id]',
+                UPDATE_PANEL_WARNING_ICON:
+                    'li[data-updated-panel-id] #outdated-panel-warning-icon',
+                UPDATE_PANEL_ICON:
+                    'li[data-updated-panel-id] #outdated-panel-replace-icon',
+            };
+
+            const ListView = Backbone.View.extend({
+                constructor: function () {},
+
+                togglePanelReplaceIcons: function togglePanelReplaceIcons(e) {
+                    console.log(e);
+                    e.currentTarget.children[0].children[0].classList.toggle(
+                        'hidden'
+                    );
+                    e.currentTarget.children[0].children[1].classList.toggle(
+                        'hidden'
+                    );
+
+                    this.$(VIEW_SELECTORS.UPDATE_PANEL_ICON)
+                        .attr(
+                            'title',
+                            'Your panel is outdated. Click to refresh'
+                        )
+                        .customtip();
+                },
+
+                events: function () {
+                    return {
+                        [`click ${VIEW_SELECTORS.REFRESH_LINK}`]:
+                            function onRefresh() {
+                                this.audienceLists.fetch();
+                            },
+                        [`mouseenter ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
+                            function onMouseEnterOutdatedPanel(e) {
+                                this.togglePanelReplaceIcons(e);
+                            },
+                        [`mouseleave ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
+                            function onMouseLeaveOutdatedPanel(e) {
+                                this.togglePanelReplaceIcons(e);
+                            },
+                    };
+                },
+
+                render: function () {
+                    this.$el = $('#list-view-template').html();
+                    return this;
+                },
+            });
+
+            const AppView = Backbone.View.extend({
+                el: $('#app'),
+
+                render: function () {
+                    this.$el.append(new ListView().render().$el);
+                },
+            });
+
+            const app = new AppView();
+            app.render();
+        </script>
     </body>
 </html>
