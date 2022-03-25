@@ -62,44 +62,66 @@
     </head>
 
     <body>
-        <div id="app"></div>
+        <div id="app">
+            <ul id="filter-panel-list"></ul>
+        </div>
         <script src="jquery.js"></script>
         <script src="underscore.js"></script>
         <script src="backbone.js"></script>
-        <script type="text/template" id="list-view-template">
+        <!-- <script type="text/template" id="list-view-template">
             <ul>
-                <li data-updated-panel-id="1">
-                    NBA Celtics 1
-                    <i
-                        id="outdated-panel-warning-icon"
-                        class="fa-solid fa-triangle-exclamation"
-                    ></i>
-                    <i
-                        id="outdated-panel-replace-icon"
-                        class="fa-solid fa-rotate hidden"
-                    ></i>
-                </li>
-                <li data-updated-panel-id="2">
-                    NBA Celtics 2
-                    <i
-                        id="outdated-panel-warning-icon"
-                        class="fa-solid fa-triangle-exclamation"
-                    ></i>
-                    <i
-                        id="outdated-panel-replace-icon"
-                        class="fa-solid fa-rotate hidden"
-                    ></i>
-                </li>
-                <li data-updated-panel-id="3">
-                    NBA Celtics 3
-                    <i
-                        id="outdated-panel-remove-icon"
-                        class="fa-solid fa-remove"
-                    ></i>
-                </li>
+
             </ul>
+        </script> -->
+        <script type="text/template" id="outdated-list-item-template">
+            <li data-updated-panel-id="{{updatedPanelId}}">
+                {{name}}
+                <i
+                    id="outdated-panel-warning-icon"
+                    class="fa-solid fa-triangle-exclamation"
+                ></i>
+                <i
+                    id="outdated-panel-replace-icon"
+                    class="fa-solid fa-rotate hidden"
+                ></i>
+            </li>
+        </script>
+        <script type="text/template" id="current-list-item-template">
+            <li data-updated-panel-id="{{updatedPanelId}}">
+                {{name}}
+                <i
+                    id="outdated-panel-remove-icon"
+                    class="fa-solid fa-remove"
+                ></i>
+            </li>
         </script>
         <script>
+            const FilterPanel = Backbone.Model.extend({});
+
+            const FilterPanels = Backbone.Collection.extend({
+                model: FilterPanel,
+            });
+
+            const filterPanels = new FilterPanels();
+
+            filterPanels.add([
+                new FilterPanel({
+                    id: 1,
+                    name: 'NBA Celtics 1',
+                    updatedPanelId: 3,
+                }),
+                new FilterPanel({
+                    id: 2,
+                    name: 'NBA Celtics 2',
+                    updatedPanelId: 3,
+                }),
+                new FilterPanel({
+                    id: 3,
+                    name: 'NBA Celtics 3',
+                    updatedPanelId: null,
+                }),
+            ]);
+
             const VIEW_SELECTORS = {
                 OUTDATED_FILTER_PANEL: 'li[data-updated-panel-id]',
                 UPDATE_PANEL_WARNING_ICON:
@@ -110,8 +132,32 @@
             };
 
             const ListView = Backbone.View.extend({
+                el: $('#filter-panel-list'),
                 render: function () {
-                    this.$el = $('#list-view-template').html();
+                    _.templateSettings = {
+                        interpolate: /\{\{(.+?)\}\}/g,
+                    };
+
+                    filterPanels.forEach((panel) => {
+                        const { name, updatedPanelId } = panel.attributes;
+
+                        let t;
+                        if (updatedPanelId) {
+                            t = _.template(
+                                $('#outdated-list-item-template')
+                                    .html()
+                                    .toString()
+                            );
+                        } else {
+                            t = _.template(
+                                $('#current-list-item-template')
+                                    .html()
+                                    .toString()
+                            );
+                        }
+                        this.$el.append(t({ name, updatedPanelId }));
+                    });
+
                     return this;
                 },
             });
@@ -158,11 +204,45 @@
                         function (e) {
                             this.toggleOpacity(e);
                         },
+                    [`click ${VIEW_SELECTORS.UPDATE_PANEL_ICON}`]: function (
+                        e
+                    ) {
+                        console.log('clicky');
+                    },
                 },
             });
 
             const app = new AppView();
             app.render();
         </script>
+        <!-- <li data-updated-panel-id="1">
+                    NBA Celtics 1
+                    <i
+                        id="outdated-panel-warning-icon"
+                        class="fa-solid fa-triangle-exclamation"
+                    ></i>
+                    <i
+                        id="outdated-panel-replace-icon"
+                        class="fa-solid fa-rotate hidden"
+                    ></i>
+                </li>
+                <li data-updated-panel-id="2">
+                    NBA Celtics 2
+                    <i
+                        id="outdated-panel-warning-icon"
+                        class="fa-solid fa-triangle-exclamation"
+                    ></i>
+                    <i
+                        id="outdated-panel-replace-icon"
+                        class="fa-solid fa-rotate hidden"
+                    ></i>
+                </li>
+                <li data-updated-panel-id="3">
+                    NBA Celtics 3
+                    <i
+                        id="outdated-panel-remove-icon"
+                        class="fa-solid fa-remove"
+                    ></i>
+                </li> -->
     </body>
 </html>
