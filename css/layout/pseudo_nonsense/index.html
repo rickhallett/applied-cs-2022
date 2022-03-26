@@ -28,6 +28,7 @@
                 text-align: center;
                 margin: auto;
                 margin-top: 40%;
+                min-width: 420px;
             }
 
             li {
@@ -226,7 +227,6 @@
             const ListItemView = Backbone.View.extend({
                 model: FilterPanel,
 
-                // el: $('#filter-panel-list'),
                 el: $('li[data-updated-panel-id]'),
 
                 constructor: function (data) {
@@ -260,17 +260,17 @@
                 render: function () {
                     setTemplateSettings();
 
+                    let lis = $('#filter-panel-list').empty();
+                    console.log(lis);
+
                     selectedAudienceList.each((panel) => {
                         const { name, updatedPanelId } = panel.attributes;
 
-                        const listItem = new ListItemView({
-                            model: panel,
-                        }).render().$el;
-
-                        // TODO: find a way to prevent re-rendering of entire list
-                        if (!selectedAudienceList.where(listItem).length) {
-                            this.$el.append(listItem);
-                        }
+                        this.$el.append(
+                            new ListItemView({
+                                model: panel,
+                            }).render().$el
+                        );
                     }, this);
 
                     return this;
@@ -306,10 +306,13 @@
                     const panelToReplace = selectedAudienceList.findWhere({
                         updatedPanelId: Number.parseInt(updatedPanelId),
                     });
+
                     selectedAudienceList.remove(panelToReplace);
+
                     const newPanel = audienceList.findWhere({
                         updatedPanelId: Number.parseInt(updatedPanelId),
                     });
+
                     selectedAudienceList.add(newPanel);
                 },
 
@@ -318,23 +321,28 @@
                         function onMouseEnterOutdatedPanel(e) {
                             this.togglePanelReplaceIcons(e);
                         },
+
                     [`mouseleave ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
                         function onMouseLeaveOutdatedPanel(e) {
                             this.togglePanelReplaceIcons(e);
                         },
+
                     [`mouseenter ${VIEW_SELECTORS.REMOVE_PANEL_ICON}`]:
                         function (e) {
                             this.toggleOpacity(e);
                         },
+
                     [`mouseleave ${VIEW_SELECTORS.REMOVE_PANEL_ICON}`]:
                         function (e) {
                             this.toggleOpacity(e);
                         },
+
                     [`click ${VIEW_SELECTORS.UPDATE_PANEL_ICON}`]: function (
                         e
                     ) {
                         const updatedPanelId =
                             e.currentTarget.parentElement.attributes[0].value;
+
                         if (updatedPanelId) {
                             this.replaceOutdatedPanel(updatedPanelId);
                         }
