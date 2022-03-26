@@ -144,7 +144,7 @@
                 }),
                 new FilterPanel({
                     id: 5,
-                    name: 'Dude its 23:42 you could go to sleep?',
+                    name: 'Dude its 23:42',
                     updatedPanelId: 6,
                 }),
                 new FilterPanel({
@@ -213,7 +213,7 @@
             selectedAudienceList.sort();
             // TODO:
             // it needs to be able to handle the possibility that the outdated panel is multiple versions out of date,
-            //    requiring recursion until latest is found, or we leave this to the user to click through
+            //    requiring traversal across the linked list of panel objects until the last node is found is found, or we leave this to the user to click through
 
             const VIEW_SELECTORS = {
                 OUTDATED_FILTER_PANEL: 'li[data-updated-panel-id]',
@@ -230,6 +230,7 @@
                 el: $('li[data-updated-panel-id]'),
 
                 constructor: function (data) {
+                    console.log('constructor', data)
                     this.template = _.template(
                         $(
                             data.model.get('updatedPanelId')
@@ -261,7 +262,6 @@
                     setTemplateSettings();
 
                     let lis = $('#filter-panel-list').empty();
-                    console.log(lis);
 
                     selectedAudienceList.each((panel) => {
                         const { name, updatedPanelId } = panel.attributes;
@@ -302,18 +302,30 @@
                     e.currentTarget.classList.toggle('lighten');
                 },
 
-                replaceOutdatedPanel: function (updatedPanelId) {
+                replaceOutdatedPanel: function (updatedPanelId, e) {
+                    console.log(selectedAudienceList.length)
                     const panelToReplace = selectedAudienceList.findWhere({
                         updatedPanelId: Number.parseInt(updatedPanelId),
                     });
 
                     selectedAudienceList.remove(panelToReplace);
+                    console.log(selectedAudienceList.length)
 
                     const newPanel = audienceList.findWhere({
-                        updatedPanelId: Number.parseInt(updatedPanelId),
+                        id: Number.parseInt(updatedPanelId),
                     });
 
                     selectedAudienceList.add(newPanel);
+                    console.log(selectedAudienceList.length)
+
+                    this.togglePanelReplaceIcons(e);
+                },
+
+                getOutdatedPanelIdAttribute: function (e) {
+                    return (
+                        e.currentTarget.parentElement.attributes[0].value ||
+                        null
+                    );
                 },
 
                 events: {
@@ -341,10 +353,10 @@
                         e
                     ) {
                         const updatedPanelId =
-                            e.currentTarget.parentElement.attributes[0].value;
+                            this.getOutdatedPanelIdAttribute(e);
 
                         if (updatedPanelId) {
-                            this.replaceOutdatedPanel(updatedPanelId);
+                            this.replaceOutdatedPanel(updatedPanelId, e);
                         }
                     },
                 },
