@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hackernews: Reloaded</title>
+    </head>
+    <body>
+        <img src="flex_terms.png" alt=""
+    </body>
+</html>
+
+<!-- 
+Note also that you can use a display value of inline-flex if you wish to lay out an element's children as flex items, but have that element behave like an inline element.
+
+. The flex: 200px declaration set on the articles means that each will be at least 200px wide.
+
+At this point it's worth noting that a shorthand exists for flex-direction and flex-wrap: flex-flow. So, for example, you can replace
+
+flex-direction: row;
+flex-wrap: wrap;
+Copy to Clipboard
+with
+
+flex-flow: row wrap;
+
+article {
+  flex: 1;
+}
+Copy to Clipboard
+This is a unitless proportion value that dictates how much available space along the main axis each flex item will take up compared to other flex items.  This value is proportionally shared among the flex items
+
+article:nth-of-type(3) {
+  flex: 2;
+}
+
+article {
+  flex: 1 200px;
+}
+
+article:nth-of-type(3) {
+  flex: 2 200px;
+}
+Copy to Clipboard
+This basically states, "Each flex item will first be given 200px of the available space. After that, the rest of the available space will be shared according to the proportion units
+
+
+flex is a shorthand property that can specify up to three different values:
+
+The unitless proportion value we discussed above. This can be specified separately using the flex-grow longhand property.
+A second unitless proportion value, flex-shrink, which comes into play when the flex items are overflowing their container. This value specifies how much an item will shrink in order to prevent overflow. This is quite an advanced flexbox feature and we won't be covering it any further in this article.
+The minimum size value we discussed above. This can be specified separately using the flex-basis longhand value.
+
+You can override the align-items behavior for individual flex items by applying the align-self property to them. For example, try adding the following to your CSS:
+
+button:first-child {
+  align-self: flex-end;
+}
+
+It's possible to create some pretty complex layouts with flexbox. It's perfectly OK to set a flex item to also be a flex container, so that its children are also laid out like flexible boxes.
+ -->

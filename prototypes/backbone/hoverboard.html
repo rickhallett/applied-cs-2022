@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hoverboard</title>
+        <script
+            src="https://kit.fontawesome.com/d7e678ca47.js"
+            crossorigin="anonymous"
+        ></script>
+        <script src="jquery.js"></script>
+        <script src="underscore.js"></script>
+        <script src="backbone.js"></script>
+        <style>
+            li {
+                list-style: none;
+            }
+
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <ul class="" id="list-items"></ul>
+        </div>
+        <ul><li id="list"></li>
+        <li id="list"></li>
+        <li id="list"></li></ul>
+    </body>
+    <script type="text/template" id="icons-template">
+        <li class="list-item">
+            <input type="text">
+                <i id="right" class="fa-solid fa-angles-right"></i>
+                <i id="down" class="fa-solid fa-angles-down hidden"></i>
+            </input>
+        </li>
+    </script>
+    <script type="text/template" id="app-template"></script>
+    <script>
+        console.log(document.getele)
+        var block = false;
+
+        var Item = Backbone.Model.extend({});
+
+        var Items = Backbone.Collection.extend({
+            model: Item,
+        });
+
+        var items = new Items();
+
+        items.add(new Item({ name: 'Item 1' }));
+        items.add(new Item({ name: 'Item 2' }));
+        items.add(new Item({ name: 'Item 3' }));
+
+        var ListItemView = Backbone.View.extend({
+            tagName: 'li',
+
+            render: function () {
+                this.$el = $('#icons-template').html();
+                console.log(this.model);
+                console.log(
+                    _.template($('#icons-template').html())()
+                );
+                return this;
+            },
+        });
+
+        var AppView = Backbone.View.extend({
+            el: $('#list-items'),
+
+            events: {
+                'mouseenter #list-item': 'toggleIcon',
+                'mouseleave #list-item': 'toggleIcon',
+                'click #down': 'clickDownIcon',
+            },
+
+            mouseEnterHandler: function () {
+                console.log('enter');
+            },
+
+            mouseLeaveHandler: function () {
+                console.log('leave');
+            },
+
+            toggleIcon: function () {
+                $('#right').toggleClass('hidden');
+                $('#down').toggleClass('hidden');
+            },
+
+            clickDownIcon: function () {
+                console.log('clickDownIcon');
+            },
+
+            initialize: function () {},
+
+            render: function () {
+                items.forEach((item) => {
+                    this.$el.append(
+                        new ListItemView({ model: item }).render().$el
+                    );
+                });
+            },
+        });
+
+        var App = new AppView();
+        App.render();
+    </script>
+</html>

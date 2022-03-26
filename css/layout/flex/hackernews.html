@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="hackernews.css" />
+        <title>Hackernews: Reloaded</title>
+    </head>
+    <body>
+        <div class="container">
+            <nav class="nav">
+                <div class="nav__logo">Y</div>
+                <h1 class="nav__logo">Hacker News</h1>
+                <div class="nav__links">
+                    <div class="nav__links--left">
+                        <a href="#">new</a>
+                        <a href="#">past</a>
+                        <a href="#">comments</a>
+                        <a href="#">ask</a>
+                        <a href="#">show</a>
+                        <a href="#">jobs</a>
+                        <a href="#">submit</a>
+                    </div>
+                    <div class="nav__links--right">
+                        <a href="#">login</a>
+                    </div>
+                </div>
+            </nav>
+            <main>
+                <div class="item-container">
+                    <div class="item__number">1</div>
+                    <div class="item__content">
+                        <div class="item__body">
+                            <div class="body__title"></div>
+                            <div class="body__link"></div>
+                        </div>
+                        <div class="item__meta">
+                            <div class="meta__points"></div>
+                            <div class="meta__author"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer>Footer goes here</footer>
+        </div>
+    </body>
+    <script>
+
+        
+
+
+
+
+    </script>
+</html>
+
+<!-- 
+Note also that you can use a display value of inline-flex if you wish to lay out an element's children as flex items, but have that element behave like an inline element.
+
+. The flex: 200px declaration set on the articles means that each will be at least 200px wide.
+
+At this point it's worth noting that a shorthand exists for flex-direction and flex-wrap: flex-flow. So, for example, you can replace
+
+flex-direction: row;
+flex-wrap: wrap;
+Copy to Clipboard
+with
+
+flex-flow: row wrap;
+
+article {
+  flex: 1;
+}
+Copy to Clipboard
+This is a unitless proportion value that dictates how much available space along the main axis each flex item will take up compared to other flex items.  This value is proportionally shared among the flex items
+
+article:nth-of-type(3) {
+  flex: 2;
+}
+
+article {
+  flex: 1 200px;
+}
+
+article:nth-of-type(3) {
+  flex: 2 200px;
+}
+Copy to Clipboard
+This basically states, "Each flex item will first be given 200px of the available space. After that, the rest of the available space will be shared according to the proportion units
+
+
+flex is a shorthand property that can specify up to three different values:
+
+The unitless proportion value we discussed above. This can be specified separately using the flex-grow longhand property.
+A second unitless proportion value, flex-shrink, which comes into play when the flex items are overflowing their container. This value specifies how much an item will shrink in order to prevent overflow. This is quite an advanced flexbox feature and we won't be covering it any further in this article.
+The minimum size value we discussed above. This can be specified separately using the flex-basis longhand value.
+
+You can override the align-items behavior for individual flex items by applying the align-self property to them. For example, try adding the following to your CSS:
+
+button:first-child {
+  align-self: flex-end;
+}
+
+It's possible to create some pretty complex layouts with flexbox. It's perfectly OK to set a flex item to also be a flex container, so that its children are also laid out like flexible boxes.
+ -->
