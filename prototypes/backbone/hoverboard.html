@@ -26,9 +26,11 @@
         <div id="app">
             <ul class="" id="list-items"></ul>
         </div>
-        <ul><li id="list"></li>
-        <li id="list"></li>
-        <li id="list"></li></ul>
+        <ul>
+            <li id="list"></li>
+            <li id="list"></li>
+            <li id="list"></li>
+        </ul>
     </body>
     <script type="text/template" id="icons-template">
         <li class="list-item">
@@ -40,7 +42,7 @@
     </script>
     <script type="text/template" id="app-template"></script>
     <script>
-        console.log(document.getele)
+        console.log(document.getele);
         var block = false;
 
         var Item = Backbone.Model.extend({});
@@ -61,9 +63,7 @@
             render: function () {
                 this.$el = $('#icons-template').html();
                 console.log(this.model);
-                console.log(
-                    _.template($('#icons-template').html())()
-                );
+                console.log(_.template($('#icons-template').html())());
                 return this;
             },
         });
