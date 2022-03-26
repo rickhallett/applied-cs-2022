@@ -106,6 +106,12 @@
 
         <!-- model/collection/view logic -->
         <script>
+            const setTemplateSettings = () => {
+                _.templateSettings = {
+                    interpolate: /\{\{(.+?)\}\}/g,
+                };
+            };
+
             const FilterPanel = Backbone.Model.extend({});
 
             const FilterPanels = Backbone.Collection.extend({
@@ -167,7 +173,7 @@
                 }),
             ]);
 
-            const selectedAudienceList = new FilterPanels();
+            let selectedAudienceList = new FilterPanels();
             selectedAudienceList.comparator = 'name';
 
             selectedAudienceList.add([
@@ -188,7 +194,7 @@
                 }),
                 new FilterPanel({
                     id: 5,
-                    name: 'Dude its 23:42 you could go to sleep?',
+                    name: 'Dude its 23:42',
                     updatedPanelId: 6,
                 }),
                 new FilterPanel({
@@ -202,6 +208,7 @@
                     updatedPanelId: null,
                 }),
             ]);
+
             selectedAudienceList.sort();
             // TODO:
             // create a global panel list (ALL panels)
@@ -209,6 +216,8 @@
             // display the selected panels
             // on clicking update icon of an out of date panel, switch this panel for the referenced id in global panels
             // re-render selected panels (if necessary; could also add a model change listener)
+            // it needs to be able to handle the possibility that the outdated panel is multiple versions out of date,
+            //    requiring recursion until latest is found, or we leave this to the user to click through
 
             const VIEW_SELECTORS = {
                 OUTDATED_FILTER_PANEL: 'li[data-updated-panel-id]',
@@ -219,28 +228,55 @@
                 REMOVE_PANEL_ICON: '#outdated-panel-remove-icon',
             };
 
+            // TODO: make a dynamic template ListItemView, or a separate view for each template
+            // in the ListView, iterate over the collection, instantiate a new ListItemView (depending on whether the model hasUpdateId)
+            //    render it and pass to ListView.$el.append()
+            const ListItemView = Backbone.View.extend({
+                model: FilterPanel,
+
+                // el: $('#filter-panel-list'),
+                el: $('li[data-updated-panel-id]'),
+
+                constructor: function (data) {
+                    this.template = _.template(
+                        $(
+                            data.model.get('updatedPanelId')
+                                ? '#outdated-list-item-template'
+                                : '#current-list-item-template'
+                        )
+                            .html()
+                            .toString()
+                    );
+                    this.model = data.model;
+                    return this;
+                },
+
+                render: function () {
+                    setTemplateSettings();
+                    this.$el = this.template(this.model.toJSON());
+                    return this;
+                },
+            });
+
             const ListView = Backbone.View.extend({
                 el: $('#filter-panel-list'),
+
+                initialize: function () {
+                    selectedAudienceList.on('update', this.render, this);
+                },
+
                 render: function () {
-                    _.templateSettings = {
-                        interpolate: /\{\{(.+?)\}\}/g,
-                    };
+                    setTemplateSettings();
 
-                    selectedAudienceList.forEach((panel) => {
+                    selectedAudienceList.each((panel) => {
                         const { name, updatedPanelId } = panel.attributes;
+                        console.log(name, updatedPanelId);
 
-                        const t = _.template(
-                            $(
-                                updatedPanelId
-                                    ? '#outdated-list-item-template'
-                                    : '#current-list-item-template'
-                            )
-                                .html()
-                                .toString()
-                        );
-
-                        this.$el.append(t({ name, updatedPanelId }));
-                    });
+                        const listItem = new ListItemView({
+                            model: panel,
+                        }).render().$el;
+                        this.$el.append(listItem);
+                    }, this);
 
                     return this;
                 },
@@ -250,7 +286,7 @@
                 el: $('#app'),
 
                 render: function () {
-                    this.$el.append(new ListView().render().$el);
+                    this.$el.append(new ListView().render().el);
                     return this;
                 },
 
@@ -271,7 +307,16 @@
                     e.currentTarget.classList.toggle('lighten');
                 },
 
-                replaceOutdatedPanel: function (updatedPanelId) {},
+                replaceOutdatedPanel: function (updatedPanelId) {
+                    const panelToReplace = selectedAudienceList.findWhere({
+                        updatedPanelId: Number.parseInt(updatedPanelId),
+                    });
+                    selectedAudienceList.remove(panelToReplace);
+                    const newPanel = audienceList.findWhere({
+                        updatedPanelId: Number.parseInt(updatedPanelId),
+                    });
+                    selectedAudienceList.add(newPanel);
+                },
 
                 events: {
                     [`mouseenter ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
@@ -298,7 +343,6 @@
                         if (updatedPanelId) {
                             this.replaceOutdatedPanel(updatedPanelId);
                         }
-                        console.log('updatedPanelId', updatedPanelId);
                     },
                 },
             });
