@@ -25,6 +25,9 @@
                 border-radius: 5px;
                 width: fit-content;
                 padding: 20px 30px 0 30px;
+                text-align: center;
+                margin: auto;
+                margin-top: 40%;
             }
 
             li {
@@ -33,6 +36,11 @@
                 color: darkblue;
                 list-style: none;
                 position: relative;
+            }
+
+            i {
+                float: right;
+                margin-left: 20px;
             }
 
             .hidden {
@@ -51,7 +59,7 @@
                 color: lightblue;
                 /* Position: absolute is required to remove the pseudoelement from the normal document flow */
                 position: absolute;
-                left: 45px;
+                left: 145px;
                 pointer-events: none;
             }
 
@@ -61,7 +69,6 @@
         </style>
     </head>
     <body>
-
         <!-- mount app -->
         <div id="app">
             <ul id="filter-panel-list"></ul>
@@ -105,9 +112,9 @@
                 model: FilterPanel,
             });
 
-            const filterPanels = new FilterPanels();
+            const audienceList = new FilterPanels();
 
-            filterPanels.add([
+            audienceList.add([
                 new FilterPanel({
                     id: 1,
                     name: 'NBA Celtics 1',
@@ -115,15 +122,92 @@
                 }),
                 new FilterPanel({
                     id: 2,
-                    name: 'NBA Celtics 2',
-                    updatedPanelId: 3,
+                    name: 'Where is my sandwhich?',
+                    updatedPanelId: 10,
                 }),
                 new FilterPanel({
                     id: 3,
                     name: 'NBA Celtics 3',
                     updatedPanelId: null,
                 }),
+                new FilterPanel({
+                    id: 4,
+                    name: 'Much Ado About Excellence',
+                    updatedPanelId: null,
+                }),
+                new FilterPanel({
+                    id: 5,
+                    name: 'Dude its 23:42 you could go to sleep?',
+                    updatedPanelId: 6,
+                }),
+                new FilterPanel({
+                    id: 6,
+                    name: 'But when youre on a roll, youre on a roll',
+                    updatedPanelId: null,
+                }),
+                new FilterPanel({
+                    id: 7,
+                    name: 'Survey of midnight coders: are they clinical?',
+                    updatedPanelId: 8,
+                }),
+                new FilterPanel({
+                    id: 8,
+                    name: 'Bringing it for Brandwatch',
+                    updatedPanelId: null,
+                }),
+                new FilterPanel({
+                    id: 9,
+                    name: 'The New World Order & Brandwatch One',
+                    updatedPanelId: null,
+                }),
+                new FilterPanel({
+                    id: 10,
+                    name: 'I cant believe someone ate my fucking sandwhich',
+                    updatedPanelId: null,
+                }),
             ]);
+
+            const selectedAudienceList = new FilterPanels();
+
+            selectedAudienceList.add([
+                new FilterPanel({
+                    id: 1,
+                    name: 'NBA Celtics 1',
+                    updatedPanelId: 3,
+                }),
+                new FilterPanel({
+                    id: 2,
+                    name: 'Where is my sandwhich?',
+                    updatedPanelId: 10,
+                }),
+                new FilterPanel({
+                    id: 4,
+                    name: 'Much Ado About Excellence',
+                    updatedPanelId: null,
+                }),
+                new FilterPanel({
+                    id: 5,
+                    name: 'Dude its 23:42 you could go to sleep?',
+                    updatedPanelId: 6,
+                }),
+                new FilterPanel({
+                    id: 7,
+                    name: 'Survey of midnight coders: are they clinical?',
+                    updatedPanelId: 8,
+                }),
+                new FilterPanel({
+                    id: 9,
+                    name: 'The New World Order & Brandwatch One',
+                    updatedPanelId: null,
+                }),
+            ]);
+
+            // TODO:
+            // create a global panel list (ALL panels)
+            // create a selected panels list (dashboard specific)
+            // display the selected panels
+            // on clicking update icon of an out of date panel, switch this panel for the referenced id in global panels
+            // re-render selected panels (if necessary; could also add a model change listener)
 
             const VIEW_SELECTORS = {
                 OUTDATED_FILTER_PANEL: 'li[data-updated-panel-id]',
@@ -141,7 +225,7 @@
                         interpolate: /\{\{(.+?)\}\}/g,
                     };
 
-                    filterPanels.forEach((panel) => {
+                    selectedAudienceList.forEach((panel) => {
                         const { name, updatedPanelId } = panel.attributes;
 
                         const t = _.template(
@@ -186,6 +270,8 @@
                     e.currentTarget.classList.toggle('lighten');
                 },
 
+                replaceOutdatedPanel: function (e) {},
+
                 events: {
                     [`mouseenter ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
                         function onMouseEnterOutdatedPanel(e) {
@@ -206,7 +292,12 @@
                     [`click ${VIEW_SELECTORS.UPDATE_PANEL_ICON}`]: function (
                         e
                     ) {
-                        console.log('clicky');
+                        const updatedPanelId =
+                            e.currentTarget.parentElement.attributes[0].value;
+                        if (updatedPanelId) {
+                            this.replaceOutdatedPanel(e);
+                        }
+                        console.log('updatedPanelId', updatedPanelId);
                     },
                 },
             });
