@@ -168,6 +168,7 @@
             ]);
 
             const selectedAudienceList = new FilterPanels();
+            selectedAudienceList.comparator = 'name';
 
             selectedAudienceList.add([
                 new FilterPanel({
@@ -201,7 +202,7 @@
                     updatedPanelId: null,
                 }),
             ]);
-
+            selectedAudienceList.sort();
             // TODO:
             // create a global panel list (ALL panels)
             // create a selected panels list (dashboard specific)
@@ -270,7 +271,7 @@
                     e.currentTarget.classList.toggle('lighten');
                 },
 
-                replaceOutdatedPanel: function (e) {},
+                replaceOutdatedPanel: function (updatedPanelId) {},
 
                 events: {
                     [`mouseenter ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
@@ -295,7 +296,7 @@
                         const updatedPanelId =
                             e.currentTarget.parentElement.attributes[0].value;
                         if (updatedPanelId) {
-                            this.replaceOutdatedPanel(e);
+                            this.replaceOutdatedPanel(updatedPanelId);
                         }
                         console.log('updatedPanelId', updatedPanelId);
                     },
