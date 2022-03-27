@@ -287,7 +287,26 @@
                 UPDATE_PANEL_ICON:
                     'li[data-updated-panel-id] #outdated-panel-replace-icon',
                 REMOVE_PANEL_ICON: '#outdated-panel-remove-icon',
+                UPDATE_ALL_PANELS_BTN: '#update-all-btn',
             };
+
+            const dispatcher = _.clone(Backbone.Events);
+
+            const UpdateAllButtonView = Backbone.View.extend({
+                el: $('#update-all-btn'),
+
+                constructor: function () {
+                    this.template = _.template(
+                        $('#update-all-btn-template').html().toString()
+                    );
+                },
+
+                render: function () {
+                    setTemplateSettings();
+                    this.$el = this.template();
+                    return this;
+                },
+            });
 
             const ListItemView = Backbone.View.extend({
                 model: FilterPanel,
@@ -295,7 +314,6 @@
                 el: $('li[data-updated-panel-id]'),
 
                 constructor: function (data) {
-                    console.log('constructor', data)
                     this.template = _.template(
                         $(
                             data.model.get('updatedPanelId')
@@ -321,69 +339,42 @@
 
                 initialize: function () {
                     selectedAudienceList.on('update', this.render, this);
+                    dispatcher.on('event:updateAllOutdatedPanels', () =>
+                        console.log('dispatcher ready')
+                    );
                 },
 
-                render: function () {
-                    setTemplateSettings();
-
-                    let lis = $('#filter-panel-list').empty();
-
-                    selectedAudienceList.each((panel) => {
-                        const { name, updatedPanelId } = panel.attributes;
-
-                        this.$el.append(
-                            new ListItemView({
-                                model: panel,
-                            }).render().$el
-                        );
-                    }, this);
-
-                    return this;
-                },
-            });
-
-            const AppView = Backbone.View.extend({
-                el: $('#app'),
-
-                render: function () {
-                    this.$el.append(new ListView().render().el);
-                    return this;
-                },
-
-                togglePanelReplaceIcons: function (e) {
+                togglePanelReplaceIcons: function ({ e }) {
                     if (
-                        e.currentTarget.childNodes[1].classList.contains(
+                        e.currentTarget?.childNodes[1]?.classList?.contains(
                             'fa-remove'
                         )
                     ) {
                         return;
                     }
 
-                    e.currentTarget.children[0].classList.toggle('hidden');
-                    e.currentTarget.children[1].classList.toggle('hidden');
+                    e.currentTarget.children[0]?.classList.toggle('hidden');
+                    e.currentTarget.children[1]?.classList.toggle('hidden');
                 },
 
                 toggleOpacity: function (e) {
                     e.currentTarget.classList.toggle('lighten');
                 },
 
-                replaceOutdatedPanel: function (updatedPanelId, e) {
-                    console.log(selectedAudienceList.length)
+                replaceOutdatedPanel: function ({ updatedPanelId, e }) {
                     const panelToReplace = selectedAudienceList.findWhere({
                         updatedPanelId: Number.parseInt(updatedPanelId),
                     });
 
                     selectedAudienceList.remove(panelToReplace);
-                    console.log(selectedAudienceList.length)
 
                     const newPanel = audienceList.findWhere({
                         id: Number.parseInt(updatedPanelId),
                     });
 
                     selectedAudienceList.add(newPanel);
-                    console.log(selectedAudienceList.length)
 
-                    this.togglePanelReplaceIcons(e);
+                    this.togglePanelReplaceIcons({ e });
                 },
 
                 getOutdatedPanelIdAttribute: function (e) {
@@ -393,15 +384,33 @@
                     );
                 },
 
+                updateAllSocialPanels: function () {
+                    const panelsToUpdate = $('#filter-panel-list')
+                        .children()
+                        .filter((i, child) =>
+                            Boolean($(child).data('updatedPanelId'))
+                        );
+
+                    // panelsToUpdate.each((i, panel) => {});
+                    console.log('panelsToUpdate', panelsToUpdate);
+
+                    panelsToUpdate.each((panel) => {
+                        console.log(panel);
+                        if (panel.updatedPanelId) {
+                            this.replaceOutdatedPanel(panel.updatedPanelId);
+                        }
+                    });
+                },
+
                 events: {
                     [`mouseenter ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
                         function onMouseEnterOutdatedPanel(e) {
-                            this.togglePanelReplaceIcons(e);
+                            this.togglePanelReplaceIcons({ e });
                         },
 
                     [`mouseleave ${VIEW_SELECTORS.OUTDATED_FILTER_PANEL}`]:
                         function onMouseLeaveOutdatedPanel(e) {
-                            this.togglePanelReplaceIcons(e);
+                            this.togglePanelReplaceIcons({ e });
                         },
 
                     [`mouseenter ${VIEW_SELECTORS.REMOVE_PANEL_ICON}`]:
@@ -421,9 +430,42 @@
                             this.getOutdatedPanelIdAttribute(e);
 
                         if (updatedPanelId) {
-                            this.replaceOutdatedPanel(updatedPanelId, e);
+                            this.replaceOutdatedPanel({ updatedPanelId, e });
                         }
                     },
+                },
+                render: function () {
+                    setTemplateSettings();
+
+                    $('#filter-panel-list').empty();
+
+                    selectedAudienceList.each((panel) => {
+                        const { name, updatedPanelId } = panel.attributes;
+                        this.$el.append(
+                            new ListItemView({
+                                model: panel,
+                            }).render().$el
+                        );
+                    }, this);
+
+                    return this;
+                },
+            });
+
+            const AppView = Backbone.View.extend({
+                el: $('.app-container'),
+
+                events: {
+                    //TODO: why can't I bind this event within the actual UpdateAllButtonView?
+                    'click #update-all-btn': function () {
+                        dispatcher.trigger('event:updateAllOutdatedPanels');
+                    },
+                },
+
+                render: function () {
+                    this.$el.append(new UpdateAllButtonView().render().$el);
+                    this.$el.append(new ListView().render().$el);
+                    return this;
                 },
             });
 
