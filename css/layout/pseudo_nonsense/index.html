@@ -340,21 +340,26 @@
                 initialize: function () {
                     selectedAudienceList.on('update', this.render, this);
                     dispatcher.on('event:updateAllOutdatedPanels', () =>
-                        console.log('dispatcher ready')
+                        this.updateAllSocialPanels()
                     );
                 },
 
-                togglePanelReplaceIcons: function ({ e }) {
+                togglePanelReplaceIcons: function ({ updatedPanelId, e }) {
+                    let el = e?.currentTarget;
+                    if (updatedPanelId) {
+                        el = $(`li[data-updated-panel-id=${updatedPanelId}]`);
+                    }
+
                     if (
-                        e.currentTarget?.childNodes[1]?.classList?.contains(
+                        e?.currentTarget?.childNodes[1]?.classList?.contains(
                             'fa-remove'
                         )
                     ) {
                         return;
                     }
 
-                    e.currentTarget.children[0]?.classList.toggle('hidden');
-                    e.currentTarget.children[1]?.classList.toggle('hidden');
+                    el.children[0]?.classList.toggle('hidden');
+                    el.children[1]?.classList.toggle('hidden');
                 },
 
                 toggleOpacity: function (e) {
@@ -374,7 +379,7 @@
 
                     selectedAudienceList.add(newPanel);
 
-                    this.togglePanelReplaceIcons({ e });
+                    this.togglePanelReplaceIcons({ updatedPanelId, e });
                 },
 
                 getOutdatedPanelIdAttribute: function (e) {
@@ -389,16 +394,14 @@
                         .children()
                         .filter((i, child) =>
                             Boolean($(child).data('updatedPanelId'))
-                        );
+                        )
+                        .map((i, $el) =>
+                            $el.getAttribute('data-updated-panel-id')
+                        )
+                        .toArray();
 
-                    // panelsToUpdate.each((i, panel) => {});
-                    console.log('panelsToUpdate', panelsToUpdate);
-
-                    panelsToUpdate.each((panel) => {
-                        console.log(panel);
-                        if (panel.updatedPanelId) {
-                            this.replaceOutdatedPanel(panel.updatedPanelId);
-                        }
+                    panelsToUpdate.forEach((id) => {
+                        this.replaceOutdatedPanel({ updatedPanelId: id });
                     });
                 },
 
