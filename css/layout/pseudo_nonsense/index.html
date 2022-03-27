@@ -125,10 +125,12 @@
         </style>
     </head>
     <body>
-        <!-- mount app -->
-        <div id="app">
-            <ul id="filter-panel-list"></ul>
-        </div>
+        <main>
+            <!-- mount app -->
+            <div class="app-container">
+                <ul id="filter-panel-list"></ul>
+            </div>
+        </main>
 
         <!-- libraries -->
         <script src="jquery.js"></script>
@@ -136,16 +138,22 @@
         <script src="backbone.js"></script>
 
         <!-- templates -->
+        <script type="text/template" id="update-all-btn-template">
+            <button id="update-all-btn">Update All</button>
+        </script>
+
         <script type="text/template" id="outdated-list-item-template">
             <li data-updated-panel-id="{{updatedPanelId}}">
                 {{name}}
                 <i
                     id="outdated-panel-warning-icon"
-                    class="fa-solid fa-triangle-exclamation"
+                    class="fa-solid fa-triangle-exclamation red"
+                    title="This panel is outdated"
                 ></i>
                 <i
                     id="outdated-panel-replace-icon"
-                    class="fa-solid fa-rotate hidden"
+                    class="fa-solid fa-rotate hidden green"
+                    title="Replace outdated panel"
                 ></i>
             </li>
         </script>
@@ -180,12 +188,17 @@
                 new FilterPanel({
                     id: 1,
                     name: 'NBA Celtics 1',
-                    updatedPanelId: 3,
+                    updatedPanelId: 20,
                 }),
                 new FilterPanel({
                     id: 2,
                     name: 'Where is my sandwhich?',
                     updatedPanelId: 10,
+                }),
+                new FilterPanel({
+                    id: 20,
+                    name: 'NBA Celtics 2',
+                    updatedPanelId: 3,
                 }),
                 new FilterPanel({
                     id: 3,
@@ -236,7 +249,7 @@
                 new FilterPanel({
                     id: 1,
                     name: 'NBA Celtics 1',
-                    updatedPanelId: 3,
+                    updatedPanelId: 20,
                 }),
                 new FilterPanel({
                     id: 2,
@@ -266,9 +279,6 @@
             ]);
 
             selectedAudienceList.sort();
-            // TODO:
-            // it needs to be able to handle the possibility that the outdated panel is multiple versions out of date,
-            //    requiring traversal across the linked list of panel objects until the last node is found is found, or we leave this to the user to click through
 
             const VIEW_SELECTORS = {
                 OUTDATED_FILTER_PANEL: 'li[data-updated-panel-id]',
